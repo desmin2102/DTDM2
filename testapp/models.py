@@ -11,6 +11,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(200), nullable=False)
     quota = db.Column(db.Integer, default=1024)  # Quota mặc định là 1GB (1024MB)
     is_premium = db.Column(db.Boolean, default=False)  # Tình trạng Premium (miễn phí hoặc trả phí)
+    payment_date = db.Column(db.DateTime, default=None)  # Ngày thanh toán, mặc định là None
+    expiry_date = db.Column(db.DateTime, default=None)  # Ngày hết hạn, mặc định là None
 
     # Quan hệ với bảng Billing (Một user có thể có nhiều billing record)
     billing_records = db.relationship('Billing', backref='owner', lazy=True)
@@ -43,5 +45,4 @@ class File(db.Model):
         return f'<File {self.filename} uploaded by {self.owner.username}>'
 
 if __name__ == '__main__':
-    with app.app_context():
         db.create_all()
